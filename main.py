@@ -61,7 +61,7 @@ while hash_id:
     if not data.get("meta", {}).get("next", False):
         break
 
-    hash_id = "https://padlet.com/api/10/wishes?wall_hashid=board_gZq7vp0O4o58vWVk&page_start=%s" % data.get("meta", {}).get("next", False)
+    hash_id = "https://padlet.com/api/10/wishes?wall_hashid=%s&page_start=%s" % (settings["paddle"]["wallid"], data.get("meta", {}).get("next", False))
 
 print("Let's start downloading")
 for post_id in posts:
