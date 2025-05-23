@@ -33,13 +33,13 @@ def loadSettings():
     if "paddle" not in settings:
         settings["paddle"] = {}
 
-    if "wallid" not in settings["pcloud"] or settings["pcloud"]["wallid"].strip() == "":
+    if "wallid" not in settings["paddle"] or settings["paddle"]["wallid"].strip() == "":
         wallid = input("Please provide wallid for paddle: ")
-        settings["pcloud"]["wallid"] = wallid.strip()
+        settings["paddle"]["wallid"] = wallid.strip()
 
     saveSettings(settings)
     return settings
 
 def saveSettings(settings):
     with open(SETTINGS_FILENAME, 'w') as file:
-        dump(settings, file)
+        dump(settings, file, allow_unicode=True)
