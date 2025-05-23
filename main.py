@@ -1,6 +1,9 @@
-from utils import loadSettings, saveSettings
+from utils import loadSettings, saveSettings, cleanUp
 from pcloud import PyCloud
 import re
+import requests
+from datetime import datetime
+import os
 
 settings = loadSettings()
 
@@ -31,8 +34,7 @@ existing_files = {}
 for file in result["metadata"]["contents"]:
     fname = file["name"]
 
-    # 2025-01-30 3309877743 Η ομάδ
-    x = re.search("^[0-9]{4}-[0-9]{2}-[0-9]{2} ([0-9]+) .*", fname)
+    x = re.search("^[0-9]{4}-[0-9]{2}-[0-9]{2} ([0-9]+).*?\\..*", fname)
     if not x:
         continue
 
@@ -44,3 +46,57 @@ for file in result["metadata"]["contents"]:
     }
 
 print("Identified %d files already in pCloud" % len(existing_files))
+
+posts = {}
+hash_id = "https://padlet.com/api/10/wishes?wall_hashid=%s&page_start=" % settings["paddle"]["wallid"]
+while hash_id:
+    print("Downloading %s ..." % hash_id)
+
+    response = requests.get(hash_id)
+    data = response.json()
+
+    for wish in data.get("data", []):
+        posts[ wish["id"] ] = wish
+
+    if not data.get("meta", {}).get("next", False):
+        break
+
+    hash_id = "https://padlet.com/api/10/wishes?wall_hashid=board_gZq7vp0O4o58vWVk&page_start=%s" % data.get("meta", {}).get("next", False)
+
+print("Let's start downloading")
+for post_id in posts:
+    post = posts[post_id]["attributes"]
+
+    # File already exists
+    if str(post.get("id", "")) in existing_files:
+        continue
+
+    created_at = datetime.strptime(post["created_at"], '%Y-%m-%dT%H:%M:%S.%fZ')
+
+    title = cleanUp(post.get("body", ""))
+
+    if not title:
+        title = cleanUp(post.get("headline", ""))
+
+    final_name = ("%s %s %s" % (created_at.strftime("%Y-%m-%d"), str(post.get("id", "")), title)).strip()
+    final_name += "." + post["attachment_link"]["extension"]
+
+    print("Downloading.. %s" % final_name, end = "")
+    response = requests.get(post["attachment"])
+    if response.status_code == 200:
+        with open(final_name, "wb") as f:
+            for chunk in response:
+                f.write(chunk)
+        print(" ..Done")
+    else:
+        print(" ..Error!!")
+        continue
+
+    print("Uploading.. %s" % final_name, end = "")
+    response = pc.uploadfile(files=[final_name], path=settings["pcloud"]["folder"])
+    if "error" in result:
+        print(" ..Error!!")
+    else:
+        print(" ..Done")
+
+    os.unlink(final_name)
