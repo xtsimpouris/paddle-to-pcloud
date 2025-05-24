@@ -1,4 +1,4 @@
-# padle-to-pcloud
+# Padlet to pCLoud
 Auto download padlet posts and save them in a pCloud folder
 
 ## How did you come up with the idea?
@@ -21,7 +21,7 @@ Our kid goes to the kinder garden, and the teacher provides weekly updates to al
 First execute will provide a small "wizard" where all missing information must be provided. All information are saved at file `settings.yaml`. In case some of the settings are wrong, you can delete the file and start over.
 
 ## Wizard requests for a "wall id", how do I find that?
-1. Login to padle
+1. Login to padlet
 2. Open developer tools and select "Network" tab
 3. Search for `https://padlet.com/api/10/wishes`
 4. In case no row is found, hit Refresh (F5)

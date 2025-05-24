@@ -31,12 +31,12 @@ def loadSettings():
         endpoint = input("Please provide endpoint for pCloud (eapi or api): ")
         settings["pcloud"]["endpoint"] = endpoint.strip()
 
-    if "paddle" not in settings:
-        settings["paddle"] = {}
+    if "padlet" not in settings:
+        settings["padlet"] = {}
 
-    if "wallid" not in settings["paddle"] or settings["paddle"]["wallid"].strip() == "":
-        wallid = input("Please provide wallid for paddle: ")
-        settings["paddle"]["wallid"] = wallid.strip()
+    if "wallid" not in settings["padlet"] or settings["padlet"]["wallid"].strip() == "":
+        wallid = input("Please provide wallid for padlet: ")
+        settings["padlet"]["wallid"] = wallid.strip()
 
     saveSettings(settings)
     return settings

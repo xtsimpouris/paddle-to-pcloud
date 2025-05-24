@@ -42,13 +42,13 @@ for file in result["metadata"]["contents"]:
     existing_files[x[1]] = {
         "name": fname,
         "size": fsize,
-        "paddle_id": x[1],
+        "padlet_id": x[1],
     }
 
 print("Identified %d files already in pCloud" % len(existing_files))
 
 posts = {}
-hash_id = "https://padlet.com/api/10/wishes?wall_hashid=%s&page_start=" % settings["paddle"]["wallid"]
+hash_id = "https://padlet.com/api/10/wishes?wall_hashid=%s&page_start=" % settings["padlet"]["wallid"]
 while hash_id:
     print("Downloading %s ..." % hash_id)
 
@@ -61,7 +61,7 @@ while hash_id:
     if not data.get("meta", {}).get("next", False):
         break
 
-    hash_id = "https://padlet.com/api/10/wishes?wall_hashid=%s&page_start=%s" % (settings["paddle"]["wallid"], data.get("meta", {}).get("next", False))
+    hash_id = "https://padlet.com/api/10/wishes?wall_hashid=%s&page_start=%s" % (settings["padlet"]["wallid"], data.get("meta", {}).get("next", False))
 
 print("Let's start downloading")
 for post_id in posts:
