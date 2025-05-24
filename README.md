@@ -20,5 +20,12 @@ Our kid goes to the kinder garden, and the teacher provides weekly updates to al
 ## How do I provide settings?
 First execute will provide a small "wizard" where all missing information must be provided. All information are saved at file `settings.yaml`. In case some of the settings are wrong, you can delete the file and start over.
 
+## Wizard requests for a "wall id", how do I find that?
+1. Login to padle
+2. Open developer tools and select "Network" tab
+3. Search for `https://padlet.com/api/10/wishes`
+4. In case no row is found, hit Refresh (F5)
+5. URL param `wall_hashid` is what we need, copy paste and provide it in wizard
+
 ## I don't feel confortable with locally stored settings, is there a chance this file may be committed?
 No, `settings.yaml` is always ignored
